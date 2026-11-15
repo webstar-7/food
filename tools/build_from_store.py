@@ -44,114 +44,12 @@ cut('<div class="foodtile" id="foodtile">', '</div>\n', keep_end=False)
 cut('// ---------- pop-up tile for nyansatek.food ----------', '// GitHub Pages hosting')
 sub('  foodTile();\n', '')
 
-# ---------------------------------------------------------------- colours: Store is navy, Food is orange
-sub(":root{--p:#17264a;--a:#d1a03a;", ":root{--p:#c14d0e;--a:#ffe2b8;")
-sub('<meta name="theme-color" content="#17264a">', '<meta name="theme-color" content="#d4570e">')
-sub(".hero{background:linear-gradient(135deg,#17264a,#22386b);", ".hero{background:linear-gradient(135deg,#cf5a10,#8a3409);")
-sub("background:#0d1630;}", "background:#4a1c05;}")
-sub(".btn.gold{background:var(--a);color:#1a1405;}", ".btn.gold{background:var(--p);color:#fff;}")
-sub(".steps li.now .dot{background:var(--a);box-shadow:0 0 0 4px rgba(209,160,58,.25);}", ".steps li.now .dot{background:#e08a1e;box-shadow:0 0 0 4px rgba(224,138,30,.25);}")
-sub(".cartbtn{background:var(--a);color:#1a1405;", ".cartbtn{background:var(--a);color:#5a2206;")
-
-# ---------------------------------------------------------------- data: food categories and food listings
-sub(".eq('active', true).eq('vertical', 'shop')", ".eq('active', true).eq('vertical', 'food')")
-sub("sb.rpc('market_listings',", "sb.rpc('food_listings',")
-
-# ---------------------------------------------------------------- words
-for old, new in [
-    ('<title>nyansatek.store · Shop from trusted local shops</title>', '<title>nyansatek.food · Order from restaurants near you</title>'),
-    ('content="Shop from trusted local shops in one place. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."',
-     'content="Order from restaurants and eateries near you. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."'),
-    ('content="NYANSATEK Store"', 'content="NYANSATEK Food"'),
-    ('nyansatek<span>.store</span>', 'nyansatek<span>.food</span>'),
-    ('placeholder="Search products"', 'placeholder="Search dishes"'),
-    ('Every shop on nyansatek.store runs on NYANSATEK POS, so stock is live.', 'Every restaurant on nyansatek.food runs on NYANSATEK Restaurant, so the menu is live.'),
-    ('>Sell on nyansatek.store</a>', '>List your restaurant</a>'),
-    ("document.title = 'nyansatek.store · Shop from trusted local shops';", "document.title = 'nyansatek.food · Order from restaurants near you';"),
-    ("gridPage('New on nyansatek.store',", "gridPage('Fresh on nyansatek.food',"),
-    ('<b>Shop from trusted local shops, in one place.</b>', '<b>Order from restaurants and eateries near you.</b>'),
-    ('<p>Live stock from every shop. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>',
-     '<p>Live menus from every kitchen. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>'),
-    ('A short tour: browse live stock, pay by MoMo or on delivery, track your order, or collect at a pickup point', 'A short tour: browse dishes, pay by MoMo or on delivery, track your order, or collect at a pickup point'),
-    ('<h2 class="sec">Shop by category</h2>', '<h2 class="sec">Order by category</h2>'),
-    ("'All products'", "'All dishes'"),
-    ('This shop is not on nyansatek.store.', 'This restaurant is not on nyansatek.food.'),
-    ('This product is no longer available.', 'This dish is no longer available.'),
-    ('<p class="note">Sold by <a href="#/shop/${E(p.shop_slug)}" data-link>', '<p class="note">From <a href="#/r/${E(p.shop_slug)}" data-link>'),
-    ('Your cart is empty. <a href="#/" data-link>Start shopping</a>', 'Your cart is empty. <a href="#/" data-link>See what is cooking</a>'),
-    ("Each shop's items are ordered and delivered separately.", "Each restaurant's dishes are ordered and delivered separately."),
-    ("'Shop confirmed'", "'Restaurant confirmed'"), ("'Packed and ready'", "'Cooked and packed'"),
-    ("'Returned to shop'", "'Returned to restaurant'"),
-    ("if (path[0] === 'shop') return shopPage(path[1]);", "if (path[0] === 'r' || path[0] === 'shop') return shopPage(path[1]);"),
-]:
-    sub(old, new, count=s.count(old) or 1)
-sub_any("the shop's", "the restaurant's")
-sub_any('the shop', 'the restaurant')
-sub_any('The shop', 'The restaurant')
-sub_any('nyansatek.store', 'nyansatek.food')
-sub_any('assets/store-reel', 'assets/food-reel')
-
-# ---------------------------------------------------------------- category heroes: one reel per food category
-a = s.index("const CAT_REELS = {")
-b = s.index("};", a) + 2
-s = s[:a] + """const CAT_REELS = {
-  'local-dishes': 'Banku, fufu, kenkey and more.',
-  'rice-dishes': 'Jollof, waakye, fried rice.',
-  'soups-stews': 'Light soup, groundnut, palm nut.',
-  'grills-khebab': 'Hot off the fire.',
-  'fast-food': 'Burgers, pizza, fried chicken.',
-  'breakfast': 'Start the day right.',
-  'pastries-snacks': 'Pies, doughnuts, small chops.',
-  'drinks-juices': 'Sobolo, fresh juice, smoothies.' };""" + s[b:]
-sub("<p>Live stock from every shop that sells ${E(top.name.toLowerCase())}. Delivery by NYANSATEK riders or pickup at a NYANSATEK point.</p>",
-    "<p>${E(top.name)} from every kitchen that serves them. Delivery by NYANSATEK riders or pickup at a NYANSATEK point.</p>")
-
-# ---------------------------------------------------------------- home: a row of the restaurants that are live
-sub("""join('')}</div>`, {});
-  playHeroReel();
-}""", """join('')}</div>
-    <div id="rest-row"></div>`, {});
-  playHeroReel();
-  // Restaurants that are live, each linking to its own page. Loaded after the page so a slow answer never holds the menu back.
-  sb.rpc('food_restaurants').then(({ data }) => {
-    const el = document.getElementById('rest-row');
-    if (!el || !data || !data.length) return;
-    el.innerHTML = `<h2 class="sec">Restaurants</h2><div class="cats">${data.map(r =>
-      `<a class="cat" href="#/r/${E(r.slug)}" data-link>${E(r.name)}<small>${r.dishes} dish${r.dishes === 1 ? '' : 'es'}${r.tagline ? ' · ' + E(r.tagline) : ''}</small></a>`).join('')}</div>`;
-  }, () => {});
-}""")
-
-# ---------------------------------------------------------------- "List your restaurant": a page on Food, not Systems' home page
-# Restaurants join by buying NYANSATEK Restaurant from this page. Checkout carries source=food, so the
-# account is made with the Online Menu add-on switched on (included) and the request to join
-# nyansatek.food already sent; the NYANSATEK team approves it in nyansatek.store/ops.
-sub('<a href="https://nyansatek.systems" target="_blank" rel="noopener">List your restaurant</a>',
-    '<a href="#/partners" data-link>List your restaurant</a>')
-sub("if (path[0] === 'orders') return myOrders();",
-    "if (path[0] === 'orders') return myOrders();\n  if (path[0] === 'partners') return partnersPage();")
-sub("""<div id="rest-row"></div>`, {});""",
-    """<div id="rest-row"></div>
-    <a class="join-band" href="#/partners" data-link><span><b>Own a restaurant, chop bar or eatery?</b>
-      Put your menu in front of hungry customers near you.</span><span class="join-go">List your restaurant →</span></a>`, {});""")
-sub('</style>', """/* "List your restaurant" page and the band on the home page */
-.join-band{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0 34px;padding:16px 18px;border-radius:14px;background:#fff4e6;border:1px solid #f6d3a8;color:#5a2206;text-decoration:none;font-size:.92rem;line-height:1.45;}
-.join-band b{display:block;font-size:1rem;}
-.join-go{flex:none;background:var(--p);color:#fff;font-weight:700;border-radius:10px;padding:9px 14px;}
-.join h2.sec{margin-top:26px;}
-.join-steps{list-style:none;padding:0;margin:10px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;counter-reset:st;}
-.join-steps li{background:#fff;border:1px solid var(--b);border-radius:14px;padding:14px 14px 14px 52px;position:relative;font-size:.9rem;line-height:1.45;color:#344054;counter-increment:st;}
-.join-steps li::before{content:counter(st);position:absolute;left:14px;top:13px;width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;font-weight:800;display:grid;place-items:center;font-size:.85rem;}
-.join-steps b{display:block;color:#111827;margin-bottom:2px;}
-.join-gets{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:10px 0;}
-.join-gets div{background:#fff;border:1px solid var(--b);border-radius:14px;padding:14px;font-size:.88rem;line-height:1.45;color:#344054;}
-.join-gets b{display:block;color:#111827;margin-bottom:2px;}
-.join-price{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:10px 0;}
-.join-price .box{margin:0;}
-.join-price .amt{font-size:1.6rem;font-weight:800;color:var(--p);margin:4px 0 2px;}
-.join-price .btn{display:block;text-align:center;margin-top:12px;}
-.hero .join-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
-.hero .join-cta a{text-decoration:none;}
-</style>""")
+# ---------------------------------------------------------------- "List your shop" becomes "List your restaurant"
+# Store has a #/partners page for shops (NYANSATEK POS, source=store). Food swaps it for the restaurant version:
+# NYANSATEK Restaurant checkout with source=food, so the account is made with the Online Menu add-on switched on
+# (included) and the request to join nyansatek.food already sent; the NYANSATEK team approves it in /ops.
+# Done before the word changes below, so they never rewrite the Food text.
+cut('// ---------- "List your shop" ----------', '// ---------- listings ----------')
 sub("// ---------- listings ----------", """// ---------- "List your restaurant" ----------
 const JOIN_CHECKOUT = 'https://nyansatek.systems/checkout.html?product=rest&source=food&plan=';
 const JOIN_WHATSAPP = 'https://wa.me/233536340578?text=' + encodeURIComponent('Hello NYANSATEK, I want to list my restaurant on nyansatek.food.');
@@ -199,6 +97,87 @@ function partnersPage() {
 }
 
 // ---------- listings ----------""")
+sub('.join-band{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0 34px;padding:16px 18px;border-radius:14px;background:#fbf6ea;border:1px solid #ecd9a8;color:#3d2c06;',
+    '.join-band{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0 34px;padding:16px 18px;border-radius:14px;background:#fff4e6;border:1px solid #f6d3a8;color:#5a2206;')
+sub('/* "List your shop" page and the band on the home page */', '/* "List your restaurant" page and the band on the home page */')
+
+# Home: a row of the restaurants that are live, then the "List your restaurant" band in place of Store's shop band.
+a = s.index('<a class="join-band" href="#/partners" data-link><span><b>Own a shop?</b>')
+b = s.index("playHeroReel();\n}", a) + len("playHeroReel();\n}")
+s = s[:a] + """<div id="rest-row"></div>
+    <a class="join-band" href="#/partners" data-link><span><b>Own a restaurant, chop bar or eatery?</b>
+      Put your menu in front of hungry customers near you.</span><span class="join-go">List your restaurant →</span></a>`, {});
+  playHeroReel();
+  // Restaurants that are live, each linking to its own page. Loaded after the page so a slow answer never holds the menu back.
+  sb.rpc('food_restaurants').then(({ data }) => {
+    const el = document.getElementById('rest-row');
+    if (!el || !data || !data.length) return;
+    el.innerHTML = `<h2 class="sec">Restaurants</h2><div class="cats">${data.map(r =>
+      `<a class="cat" href="#/r/${E(r.slug)}" data-link>${E(r.name)}<small>${r.dishes} dish${r.dishes === 1 ? '' : 'es'}${r.tagline ? ' · ' + E(r.tagline) : ''}</small></a>`).join('')}</div>`;
+  }, () => {});
+}""" + s[b:]
+
+# ---------------------------------------------------------------- colours: Store is navy, Food is orange
+sub(":root{--p:#17264a;--a:#d1a03a;", ":root{--p:#c14d0e;--a:#ffe2b8;")
+sub('<meta name="theme-color" content="#17264a">', '<meta name="theme-color" content="#d4570e">')
+sub(".hero{background:linear-gradient(135deg,#17264a,#22386b);", ".hero{background:linear-gradient(135deg,#cf5a10,#8a3409);")
+sub("background:#0d1630;}", "background:#4a1c05;}")
+sub(".btn.gold{background:var(--a);color:#1a1405;}", ".btn.gold{background:var(--p);color:#fff;}")
+sub(".steps li.now .dot{background:var(--a);box-shadow:0 0 0 4px rgba(209,160,58,.25);}", ".steps li.now .dot{background:#e08a1e;box-shadow:0 0 0 4px rgba(224,138,30,.25);}")
+sub(".cartbtn{background:var(--a);color:#1a1405;", ".cartbtn{background:var(--a);color:#5a2206;")
+
+# ---------------------------------------------------------------- data: food categories and food listings
+sub(".eq('active', true).eq('vertical', 'shop')", ".eq('active', true).eq('vertical', 'food')")
+sub("sb.rpc('market_listings',", "sb.rpc('food_listings',")
+
+# ---------------------------------------------------------------- words
+for old, new in [
+    ('<title>nyansatek.store · Shop from trusted local shops</title>', '<title>nyansatek.food · Order from restaurants near you</title>'),
+    ('content="Shop from trusted local shops in one place. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."',
+     'content="Order from restaurants and eateries near you. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."'),
+    ('content="NYANSATEK Store"', 'content="NYANSATEK Food"'),
+    ('nyansatek<span>.store</span>', 'nyansatek<span>.food</span>'),
+    ('placeholder="Search products"', 'placeholder="Search dishes"'),
+    ('Every shop on nyansatek.store runs on NYANSATEK POS, so stock is live.', 'Every restaurant on nyansatek.food runs on NYANSATEK Restaurant, so the menu is live.'),
+    ('>List your shop</a>', '>List your restaurant</a>'),
+    ("document.title = 'nyansatek.store · Shop from trusted local shops';", "document.title = 'nyansatek.food · Order from restaurants near you';"),
+    ("gridPage('New on nyansatek.store',", "gridPage('Fresh on nyansatek.food',"),
+    ('<b>Shop from trusted local shops, in one place.</b>', '<b>Order from restaurants and eateries near you.</b>'),
+    ('<p>Live stock from every shop. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>',
+     '<p>Live menus from every kitchen. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>'),
+    ('A short tour: browse live stock, pay by MoMo or on delivery, track your order, or collect at a pickup point', 'A short tour: browse dishes, pay by MoMo or on delivery, track your order, or collect at a pickup point'),
+    ('<h2 class="sec">Shop by category</h2>', '<h2 class="sec">Order by category</h2>'),
+    ("'All products'", "'All dishes'"),
+    ('This shop is not on nyansatek.store.', 'This restaurant is not on nyansatek.food.'),
+    ('This product is no longer available.', 'This dish is no longer available.'),
+    ('<p class="note">Sold by <a href="#/shop/${E(p.shop_slug)}" data-link>', '<p class="note">From <a href="#/r/${E(p.shop_slug)}" data-link>'),
+    ('Your cart is empty. <a href="#/" data-link>Start shopping</a>', 'Your cart is empty. <a href="#/" data-link>See what is cooking</a>'),
+    ("Each shop's items are ordered and delivered separately.", "Each restaurant's dishes are ordered and delivered separately."),
+    ("'Shop confirmed'", "'Restaurant confirmed'"), ("'Packed and ready'", "'Cooked and packed'"),
+    ("'Returned to shop'", "'Returned to restaurant'"),
+    ("if (path[0] === 'shop') return shopPage(path[1]);", "if (path[0] === 'r' || path[0] === 'shop') return shopPage(path[1]);"),
+]:
+    sub(old, new, count=s.count(old) or 1)
+sub_any("the shop's", "the restaurant's")
+sub_any('the shop', 'the restaurant')
+sub_any('The shop', 'The restaurant')
+sub_any('nyansatek.store', 'nyansatek.food')
+sub_any('assets/store-reel', 'assets/food-reel')
+
+# ---------------------------------------------------------------- category heroes: one reel per food category
+a = s.index("const CAT_REELS = {")
+b = s.index("};", a) + 2
+s = s[:a] + """const CAT_REELS = {
+  'local-dishes': 'Banku, fufu, kenkey and more.',
+  'rice-dishes': 'Jollof, waakye, fried rice.',
+  'soups-stews': 'Light soup, groundnut, palm nut.',
+  'grills-khebab': 'Hot off the fire.',
+  'fast-food': 'Burgers, pizza, fried chicken.',
+  'breakfast': 'Start the day right.',
+  'pastries-snacks': 'Pies, doughnuts, small chops.',
+  'drinks-juices': 'Sobolo, fresh juice, smoothies.' };""" + s[b:]
+sub("<p>Live stock from every shop that sells ${E(top.name.toLowerCase())}. Delivery by NYANSATEK riders or pickup at a NYANSATEK point.</p>",
+    "<p>${E(top.name)} from every kitchen that serves them. Delivery by NYANSATEK riders or pickup at a NYANSATEK point.</p>")
 
 open(f'{OUT}/index.html', 'w', encoding='utf-8').write(s)
 

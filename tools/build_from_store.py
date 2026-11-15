@@ -29,6 +29,21 @@ def sub_any(old, new):
     s = s.replace(old, new)
 
 
+def cut(start, end, keep_end=True):
+    """Remove the text from `start` up to `end` (kept unless keep_end=False); both must be there once."""
+    global s
+    assert s.count(start) == 1, (start[:90], s.count(start))
+    a = s.index(start)
+    b = s.index(end, a)
+    s = s[:a] + (s[b:] if keep_end else s[b + len(end):])
+
+
+# ---------------------------------------------------------------- Store's pop-up tile advertises nyansatek.food: not on Food itself
+cut('/* pop-up tile linking to nyansatek.food', '</style>')
+cut('<div class="foodtile" id="foodtile">', '</div>\n', keep_end=False)
+cut('// ---------- pop-up tile for nyansatek.food ----------', '// GitHub Pages hosting')
+sub('  foodTile();\n', '')
+
 # ---------------------------------------------------------------- colours: Store is navy, Food is orange
 sub(":root{--p:#17264a;--a:#d1a03a;", ":root{--p:#c14d0e;--a:#ffe2b8;")
 sub('<meta name="theme-color" content="#17264a">', '<meta name="theme-color" content="#d4570e">')
@@ -106,6 +121,85 @@ sub("""join('')}</div>`, {});
   }, () => {});
 }""")
 
+# ---------------------------------------------------------------- "List your restaurant": a page on Food, not Systems' home page
+# Restaurants join by buying NYANSATEK Restaurant from this page. Checkout carries source=food, so the
+# account is made with the Online Menu add-on switched on (included) and the request to join
+# nyansatek.food already sent; the NYANSATEK team approves it in nyansatek.store/ops.
+sub('<a href="https://nyansatek.systems" target="_blank" rel="noopener">List your restaurant</a>',
+    '<a href="#/partners" data-link>List your restaurant</a>')
+sub("if (path[0] === 'orders') return myOrders();",
+    "if (path[0] === 'orders') return myOrders();\n  if (path[0] === 'partners') return partnersPage();")
+sub("""<div id="rest-row"></div>`, {});""",
+    """<div id="rest-row"></div>
+    <a class="join-band" href="#/partners" data-link><span><b>Own a restaurant, chop bar or eatery?</b>
+      Put your menu in front of hungry customers near you.</span><span class="join-go">List your restaurant →</span></a>`, {});""")
+sub('</style>', """/* "List your restaurant" page and the band on the home page */
+.join-band{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0 34px;padding:16px 18px;border-radius:14px;background:#fff4e6;border:1px solid #f6d3a8;color:#5a2206;text-decoration:none;font-size:.92rem;line-height:1.45;}
+.join-band b{display:block;font-size:1rem;}
+.join-go{flex:none;background:var(--p);color:#fff;font-weight:700;border-radius:10px;padding:9px 14px;}
+.join h2.sec{margin-top:26px;}
+.join-steps{list-style:none;padding:0;margin:10px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;counter-reset:st;}
+.join-steps li{background:#fff;border:1px solid var(--b);border-radius:14px;padding:14px 14px 14px 52px;position:relative;font-size:.9rem;line-height:1.45;color:#344054;counter-increment:st;}
+.join-steps li::before{content:counter(st);position:absolute;left:14px;top:13px;width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;font-weight:800;display:grid;place-items:center;font-size:.85rem;}
+.join-steps b{display:block;color:#111827;margin-bottom:2px;}
+.join-gets{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:10px 0;}
+.join-gets div{background:#fff;border:1px solid var(--b);border-radius:14px;padding:14px;font-size:.88rem;line-height:1.45;color:#344054;}
+.join-gets b{display:block;color:#111827;margin-bottom:2px;}
+.join-price{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:10px 0;}
+.join-price .box{margin:0;}
+.join-price .amt{font-size:1.6rem;font-weight:800;color:var(--p);margin:4px 0 2px;}
+.join-price .btn{display:block;text-align:center;margin-top:12px;}
+.hero .join-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.hero .join-cta a{text-decoration:none;}
+</style>""")
+sub("// ---------- listings ----------", """// ---------- "List your restaurant" ----------
+const JOIN_CHECKOUT = 'https://nyansatek.systems/checkout.html?product=rest&source=food&plan=';
+const JOIN_WHATSAPP = 'https://wa.me/233536340578?text=' + encodeURIComponent('Hello NYANSATEK, I want to list my restaurant on nyansatek.food.');
+function partnersPage() {
+  document.title = 'List your restaurant · nyansatek.food';
+  app.innerHTML = `<div class="join">
+    <div class="hero"><b style="display:block;font-size:1.5rem;line-height:1.2;">Bring your kitchen to nyansatek.food</b>
+      <p style="max-width:56ch;">Hungry customers near you order here every day. Put your menu online, get every order on your kitchen screen,
+      and let NYANSATEK riders deliver it, or let customers pick up at a NYANSATEK point.</p>
+      <div class="join-cta"><a class="btn" style="background:#fff;color:var(--p);" href="${JOIN_CHECKOUT}standard">Get started · GH₵200 a month</a>
+        <a class="btn" style="background:transparent;border:1px solid rgba(255,255,255,.65);" href="${JOIN_WHATSAPP}" target="_blank" rel="noopener">Ask us on WhatsApp</a></div></div>
+
+    <h2 class="sec">How it works</h2>
+    <ol class="join-steps">
+      <li><b>Sign up for NYANSATEK Restaurant</b>Pay by Mobile Money or card. Your login arrives by SMS and email within minutes.</li>
+      <li><b>Add your menu</b>Sign in at nyansatek.rest and add your dishes with prices and photos. Your online menu is already switched on.</li>
+      <li><b>We approve your restaurant</b>Your request to join nyansatek.food is sent for you. The NYANSATEK team checks it and lets you know.</li>
+      <li><b>Take orders</b>Orders land on your kitchen screen. Riders collect and deliver, or customers come for it.</li>
+    </ol>
+
+    <h2 class="sec">What you get</h2>
+    <div class="join-gets">
+      <div><b>Listed on nyansatek.food</b>Your dishes in front of customers searching for food near them.</div>
+      <div><b>Your own online menu page</b>A link you can share on WhatsApp and social media.</div>
+      <div><b>Till and kitchen screen</b>Eat in, takeaway and delivery orders as tickets, from new to served.</div>
+      <div><b>Delivery by NYANSATEK riders</b>Screened riders carry your orders, or customers pick up at a NYANSATEK point.</div>
+      <div><b>Mobile Money, card and cash</b>Customers pay online or on delivery. Receipts by print or SMS.</div>
+      <div><b>Sales and profit reports</b>See what sold, what it cost and what you made, every day.</div>
+    </div>
+
+    <h2 class="sec">What it costs</h2>
+    <div class="join-price">
+      <div class="box"><div class="note">Monthly</div><div class="amt">GH₵200</div><div class="note">per month</div>
+        <a class="btn" href="${JOIN_CHECKOUT}standard">Choose monthly</a></div>
+      <div class="box"><div class="note">Yearly · two months free</div><div class="amt">GH₵2,000</div><div class="note">per year</div>
+        <a class="btn" href="${JOIN_CHECKOUT}yearly">Choose yearly</a></div>
+    </div>
+    <p class="note">The online menu is included when you join from this page. On orders that come through nyansatek.food,
+      NYANSATEK keeps a 5% commission. No setup fee, cancel anytime.</p>
+
+    <div class="box"><b>Already use NYANSATEK Restaurant?</b>
+      <p class="note" style="margin-top:4px;">Sign in at <a href="https://nyansatek.rest" target="_blank" rel="noopener">nyansatek.rest</a>, open Settings → Online Shop,
+      and press <b>Request to join nyansatek.food</b>. Questions? Call or WhatsApp <a href="tel:0536340578">0536 340 578</a>.</p></div>
+  </div>`;
+}
+
+// ---------- listings ----------""")
+
 open(f'{OUT}/index.html', 'w', encoding='utf-8').write(s)
 
 # ---------------------------------------------------------------- manifest, service worker, domain
@@ -121,10 +215,13 @@ json.dump({
     open(f'{OUT}/manifest.json', 'w'), indent=2)
 open(f'{OUT}/manifest.json', 'a').write('\n')
 w = open(f'{SRC}/sw.js', encoding='utf-8').read()
-for old, new in [("/* nyansatek.store service worker", "/* nyansatek.food service worker"), ("'nyansatek-store-v1'", "'nyansatek-food-v1'"),
+for old, new in [("/* nyansatek.store service worker", "/* nyansatek.food service worker"),
                  ("k.startsWith('nyansatek-store-')", "k.startsWith('nyansatek-food-')"), ("'assets/store-reel.jpg'", "'assets/food-reel.jpg'")]:
     assert w.count(old) == 1, old
     w = w.replace(old, new)
+# Store bumps its cache version (v1, v2, ...) whenever installed apps must refresh; Food follows the same number.
+w, n = re.subn(r"'nyansatek-store-v(\d+)'", r"'nyansatek-food-v\1'", w)
+assert n == 1, 'service worker VERSION not found'
 open(f'{OUT}/sw.js', 'w', encoding='utf-8').write(w)
 open(f'{OUT}/CNAME', 'w').write('nyansatek.food\n')
 print('food built:', len(s), 'bytes')

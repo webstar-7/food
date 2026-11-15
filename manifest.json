@@ -1,0 +1,35 @@
+{
+  "name": "nyansatek.food",
+  "short_name": "NYANSATEK Food",
+  "description": "Order from restaurants and eateries near you. Delivery by NYANSATEK riders or pickup at NYANSATEK points.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#d4570e",
+  "theme_color": "#d4570e",
+  "categories": [
+    "food"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

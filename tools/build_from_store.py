@@ -51,48 +51,51 @@ sub('  foodTile();\n', '')
 # Done before the word changes below, so they never rewrite the Food text.
 cut('// ---------- "List your shop" ----------', '// ---------- listings ----------')
 sub("// ---------- listings ----------", """// ---------- "List your restaurant" ----------
+// Listing is free and needs no software. Customers pay NYANSATEK by MoMo; the team places each order with the
+// restaurant by phone, calls a rider, and pays the restaurant its menu prices by close of business.
+// Customers pay GH₵5 on top of each dish. NYANSATEK Restaurant is optional.
 const JOIN_CHECKOUT = 'https://nyansatek.systems/checkout.html?product=rest&source=food&plan=';
 const JOIN_WHATSAPP = 'https://wa.me/233536340578?text=' + encodeURIComponent('Hello NYANSATEK, I want to list my restaurant on nyansatek.food.');
 function partnersPage() {
   document.title = 'List your restaurant · nyansatek.food';
   app.innerHTML = `<div class="join">
     <div class="hero"><b style="display:block;font-size:1.5rem;line-height:1.2;">Bring your kitchen to nyansatek.food</b>
-      <p style="max-width:56ch;">Hungry customers near you order here every day. Put your menu online, get every order on your kitchen screen,
-      and let NYANSATEK riders deliver it, or let customers pick up at a NYANSATEK point.</p>
-      <div class="join-cta"><a class="btn" style="background:#fff;color:var(--p);" href="${JOIN_CHECKOUT}standard">Get started · GH₵200 a month</a>
-        <a class="btn" style="background:transparent;border:1px solid rgba(255,255,255,.65);" href="${JOIN_WHATSAPP}" target="_blank" rel="noopener">Ask us on WhatsApp</a></div></div>
+      <p style="max-width:56ch;">Hungry customers near you order here. They pay NYANSATEK by MoMo, we place each order with you by phone
+      and send a rider to collect it. You get your full menu price by close of business.</p>
+      <div class="join-cta"><a class="btn" style="background:#fff;color:var(--p);" href="${JOIN_WHATSAPP}" target="_blank" rel="noopener">List my restaurant</a>
+        <a class="btn" style="background:transparent;border:1px solid rgba(255,255,255,.65);" href="tel:0536340578">Call 053 634 0578</a></div></div>
 
     <h2 class="sec">How it works</h2>
     <ol class="join-steps">
-      <li><b>Sign up for NYANSATEK Restaurant</b>Pay by Mobile Money or card. Your login arrives by SMS and email within minutes.</li>
-      <li><b>Add your menu</b>Sign in at nyansatek.rest and add your dishes with prices and photos. Your online menu is already switched on.</li>
-      <li><b>We approve your restaurant</b>Your request to join nyansatek.food is sent for you. The NYANSATEK team checks it and lets you know.</li>
-      <li><b>Take orders</b>Orders land on your kitchen screen. Riders collect and deliver, or customers come for it.</li>
+      <li><b>Get listed</b>Call or WhatsApp us. Listing is free and you need no new software: we put your menu up for you.</li>
+      <li><b>Your menu goes up</b>With your prices and photos. On NYANSATEK Restaurant you can update it yourself at nyansatek.rest.</li>
+      <li><b>Customers order and pay us</b>By MoMo, before anything happens. No unpaid or prank orders reach your kitchen.</li>
+      <li><b>We call you, then a rider</b>We place the order with you by phone and send a rider to collect it.</li>
     </ol>
 
     <h2 class="sec">What you get</h2>
     <div class="join-gets">
       <div><b>Listed on nyansatek.food</b>Your dishes in front of customers searching for food near them.</div>
-      <div><b>Your own online menu page</b>A link you can share on WhatsApp and social media.</div>
-      <div><b>Till and kitchen screen</b>Eat in, takeaway and delivery orders as tickets, from new to served.</div>
-      <div><b>Delivery by NYANSATEK riders</b>Screened riders carry your orders, or customers pick up at a NYANSATEK point.</div>
-      <div><b>Mobile Money, card and cash</b>Customers pay online or on delivery. Receipts by print or SMS.</div>
-      <div><b>Sales and profit reports</b>See what sold, what it cost and what you made, every day.</div>
+      <div><b>Your full price, every day</b>Customers pay GH₵5 on top of each dish. You receive exactly your menu prices by MoMo by close of business.</div>
+      <div><b>Paid before you cook</b>Every order is paid by MoMo first. No pay on delivery, no prank orders.</div>
+      <div><b>Delivery arranged for you</b>We call a rider to collect and deliver. The customer pays the rider's fee.</div>
+      <div><b>No new software needed</b>Keep running your kitchen your way. We take the orders and call you.</div>
+      <div><b>NYANSATEK Restaurant, if you want it</b>Till, kitchen screen and your own online menu page, with sales and profit reports.</div>
     </div>
 
     <h2 class="sec">What it costs</h2>
+    <p style="margin:6px 0 10px;line-height:1.5;"><b>Listing on nyansatek.food is free.</b> Customers pay GH₵5 on top of each dish, and that is how NYANSATEK is paid.</p>
     <div class="join-price">
-      <div class="box"><div class="note">Monthly</div><div class="amt">GH₵200</div><div class="note">per month</div>
+      <div class="box"><div class="note">NYANSATEK Restaurant (optional) · monthly</div><div class="amt">GH₵200</div><div class="note">per month</div>
         <a class="btn" href="${JOIN_CHECKOUT}standard">Choose monthly</a></div>
-      <div class="box"><div class="note">Yearly · two months free</div><div class="amt">GH₵2,000</div><div class="note">per year</div>
+      <div class="box"><div class="note">NYANSATEK Restaurant (optional) · yearly, two months free</div><div class="amt">GH₵2,000</div><div class="note">per year</div>
         <a class="btn" href="${JOIN_CHECKOUT}yearly">Choose yearly</a></div>
     </div>
-    <p class="note">The online menu is included when you join from this page. On orders that come through nyansatek.food,
-      NYANSATEK keeps a 5% commission. No setup fee, cancel anytime.</p>
+    <p class="note">No setup fee. Cancel anytime.</p>
 
     <div class="box"><b>Already use NYANSATEK Restaurant?</b>
-      <p class="note" style="margin-top:4px;">Sign in at <a href="https://nyansatek.rest" target="_blank" rel="noopener">nyansatek.rest</a>, open Settings → Online Menu,
-      and press <b>Request to join nyansatek.food</b>. Questions? Call or WhatsApp <a href="tel:0536340578">0536 340 578</a>.</p></div>
+      <p class="note" style="margin-top:4px;">Your online menu is already switched on, free. Call or WhatsApp us on <a href="tel:0536340578">053 634 0578</a>
+      and we will list you on nyansatek.food.</p></div>
   </div>`;
 }
 
@@ -133,19 +136,19 @@ sub("sb.rpc('market_listings',", "sb.rpc('food_listings',")
 # ---------------------------------------------------------------- words
 for old, new in [
     ('<title>nyansatek.store · Shop from trusted local shops</title>', '<title>nyansatek.food · Order from restaurants near you</title>'),
-    ('content="Shop from trusted local shops in one place. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."',
-     'content="Order from restaurants and eateries near you. Delivery by NYANSATEK riders or pickup at NYANSATEK points. Pay by MoMo or on delivery."'),
+    ('content="Shop from trusted local shops in one place. Pay by MoMo, we place your order and a rider brings it to you."',
+     'content="Order from restaurants and eateries near you. Pay by MoMo, we place your order and a rider brings it to you."'),
     ('content="NYANSATEK Store"', 'content="NYANSATEK Food"'),
     ('nyansatek<span>.store</span>', 'nyansatek<span>.food</span>'),
     ('placeholder="Search products"', 'placeholder="Search dishes"'),
-    ('Every shop on nyansatek.store runs on NYANSATEK POS, so stock is live.', 'Every restaurant on nyansatek.food runs on NYANSATEK Restaurant, so the menu is live.'),
+    ('Every shop on nyansatek.store runs on NYANSATEK POS, so stock is live.', 'Every restaurant on nyansatek.food is checked by the NYANSATEK team.'),
     ('>List your shop</a>', '>List your restaurant</a>'),
     ("document.title = 'nyansatek.store · Shop from trusted local shops';", "document.title = 'nyansatek.food · Order from restaurants near you';"),
     ("gridPage('New on nyansatek.store',", "gridPage('Fresh on nyansatek.food',"),
     ('<b>Shop from trusted local shops, in one place.</b>', '<b>Order from restaurants and eateries near you.</b>'),
-    ('<p>Live stock from every shop. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>',
-     '<p>Live menus from every kitchen. Delivery by NYANSATEK riders or pickup at a NYANSATEK point. Pay by MoMo or when you receive it.</p>'),
-    ('A short tour: browse live stock, pay by MoMo or on delivery, track your order, or collect at a pickup point', 'A short tour: browse dishes, pay by MoMo or on delivery, track your order, or collect at a pickup point'),
+    ('<p>Live stock from every shop. Pay by MoMo, we place your order and a rider brings it to you.</p>',
+     '<p>Dishes from kitchens near you. Pay by MoMo, we place your order and a rider brings it to you.</p>'),
+    ('A short tour: browse live stock, pay by MoMo and track your order', 'A short tour: browse dishes, pay by MoMo and track your order'),
     ('<h2 class="sec">Shop by category</h2>', '<h2 class="sec">Order by category</h2>'),
     ("'All products'", "'All dishes'"),
     ('This shop is not on nyansatek.store.', 'This restaurant is not on nyansatek.food.'),
@@ -158,9 +161,8 @@ for old, new in [
     ("if (path[0] === 'shop') return shopPage(path[1]);", "if (path[0] === 'r' || path[0] === 'shop') return shopPage(path[1]);"),
 ]:
     sub(old, new, count=s.count(old) or 1)
-sub_any("the shop's", "the restaurant's")
 sub_any('the shop', 'the restaurant')
-sub_any('The shop', 'The restaurant')
+s = s.replace('The shop', 'The restaurant')
 sub_any('nyansatek.store', 'nyansatek.food')
 sub_any('assets/store-reel', 'assets/food-reel')
 
@@ -184,7 +186,7 @@ open(f'{OUT}/index.html', 'w', encoding='utf-8').write(s)
 # ---------------------------------------------------------------- manifest, service worker, domain
 json.dump({
     "name": "nyansatek.food", "short_name": "NYANSATEK Food",
-    "description": "Order from restaurants and eateries near you. Delivery by NYANSATEK riders or pickup at NYANSATEK points.",
+    "description": "Order from restaurants and eateries near you. Pay by MoMo, we place your order and a rider brings it to you.",
     "id": "./", "start_url": "./", "scope": "./", "display": "standalone", "orientation": "any",
     "background_color": "#d4570e", "theme_color": "#d4570e", "categories": ["food"],
     "icons": [

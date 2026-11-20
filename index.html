@@ -205,7 +205,7 @@ function topSlugOf(slug) { const c = REF.cats.find(x => x.slug === slug); if (!c
 // ---------- "List your restaurant" ----------
 // Listing is free and needs no software. Customers pay NYANSATEK by MoMo; the team places each order with the
 // restaurant by phone, calls a rider, and pays the restaurant its menu prices by close of business.
-// Customers pay GH₵5 on top of each dish. NYANSATEK Restaurant is optional.
+// NYANSATEK Restaurant is optional.
 const JOIN_CHECKOUT = 'https://nyansatek.systems/checkout.html?product=rest&source=food&plan=';
 const JOIN_WHATSAPP = 'https://wa.me/233536340578?text=' + encodeURIComponent('Hello NYANSATEK, I want to list my restaurant on nyansatek.food.');
 function partnersPage() {
@@ -228,7 +228,7 @@ function partnersPage() {
     <h2 class="sec">What you get</h2>
     <div class="join-gets">
       <div><b>Listed on nyansatek.food</b>Your dishes in front of customers searching for food near them.</div>
-      <div><b>Your full price, every day</b>Customers pay GH₵5 on top of each dish. You receive exactly your menu prices by MoMo by close of business.</div>
+      <div><b>Your full price, every day</b>You receive exactly your menu prices by MoMo by close of business.</div>
       <div><b>Paid before you cook</b>Every order is paid by MoMo first. No pay on delivery, no prank orders.</div>
       <div><b>Delivery arranged for you</b>We call a rider to collect and deliver. The customer pays the rider's fee.</div>
       <div><b>No new software needed</b>Keep running your kitchen your way. We take the orders and call you.</div>
@@ -236,7 +236,7 @@ function partnersPage() {
     </div>
 
     <h2 class="sec">What it costs</h2>
-    <p style="margin:6px 0 10px;line-height:1.5;"><b>Listing on nyansatek.food is free.</b> Customers pay GH₵5 on top of each dish, and that is how NYANSATEK is paid.</p>
+    <p style="margin:6px 0 10px;line-height:1.5;"><b>Listing on nyansatek.food is free.</b></p>
     <div class="join-price">
       <div class="box"><div class="note">NYANSATEK Restaurant (optional) · monthly</div><div class="amt">GH₵200</div><div class="note">per month</div>
         <a class="btn" href="${JOIN_CHECKOUT}standard">Choose monthly</a></div>

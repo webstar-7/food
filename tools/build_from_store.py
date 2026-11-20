@@ -136,8 +136,8 @@ sub("sb.rpc('market_listings',", "sb.rpc('food_listings',")
 # ---------------------------------------------------------------- words
 for old, new in [
     ('<title>nyansatek.store · Shop from trusted local shops</title>', '<title>nyansatek.food · Order from restaurants near you</title>'),
-    ('content="Shop from trusted local shops in one place. Pay by MoMo, we place your order and a rider brings it to you."',
-     'content="Order from restaurants and eateries near you. Pay by MoMo, we place your order and a rider brings it to you."'),
+    ('content="Shop from trusted local shops in one place. Pay by MoMo and a rider brings it to your door."',
+     'content="Order from restaurants and eateries near you. Pay by MoMo and a rider brings it to your door."'),
     ('content="NYANSATEK Store"', 'content="NYANSATEK Food"'),
     ('nyansatek<span>.store</span>', 'nyansatek<span>.food</span>'),
     ('placeholder="Search products"', 'placeholder="Search dishes"'),
@@ -146,8 +146,8 @@ for old, new in [
     ("document.title = 'nyansatek.store · Shop from trusted local shops';", "document.title = 'nyansatek.food · Order from restaurants near you';"),
     ("gridPage('New on nyansatek.store',", "gridPage('Fresh on nyansatek.food',"),
     ('<b>Shop from trusted local shops, in one place.</b>', '<b>Order from restaurants and eateries near you.</b>'),
-    ('<p>Live stock from every shop. Pay by MoMo, we place your order and a rider brings it to you.</p>',
-     '<p>Dishes from kitchens near you. Pay by MoMo, we place your order and a rider brings it to you.</p>'),
+    ('<p>Live stock from every shop. Pay by MoMo and a rider brings it to your door.</p>',
+     '<p>Dishes from kitchens near you. Pay by MoMo and a rider brings it to your door.</p>'),
     ('A short tour: browse live stock, pay by MoMo and track your order', 'A short tour: browse dishes, pay by MoMo and track your order'),
     ('<h2 class="sec">Shop by category</h2>', '<h2 class="sec">Order by category</h2>'),
     ("'All products'", "'All dishes'"),
@@ -155,13 +155,12 @@ for old, new in [
     ('This product is no longer available.', 'This dish is no longer available.'),
     ('<p class="note">Sold by <a href="#/shop/${E(p.shop_slug)}" data-link>', '<p class="note">From <a href="#/r/${E(p.shop_slug)}" data-link>'),
     ('Your cart is empty. <a href="#/" data-link>Start shopping</a>', 'Your cart is empty. <a href="#/" data-link>See what is cooking</a>'),
-    ("Each shop's items are ordered and delivered separately.", "Each restaurant's dishes are ordered and delivered separately."),
     ("'Shop confirmed'", "'Restaurant confirmed'"), ("'Packed and ready'", "'Cooked and packed'"),
     ("'Returned to shop'", "'Returned to restaurant'"),
     ("if (path[0] === 'shop') return shopPage(path[1]);", "if (path[0] === 'r' || path[0] === 'shop') return shopPage(path[1]);"),
 ]:
     sub(old, new, count=s.count(old) or 1)
-sub_any('the shop', 'the restaurant')
+s = s.replace('the shop', 'the restaurant')
 s = s.replace('The shop', 'The restaurant')
 sub_any('nyansatek.store', 'nyansatek.food')
 sub_any('assets/store-reel', 'assets/food-reel')
@@ -186,7 +185,7 @@ open(f'{OUT}/index.html', 'w', encoding='utf-8').write(s)
 # ---------------------------------------------------------------- manifest, service worker, domain
 json.dump({
     "name": "nyansatek.food", "short_name": "NYANSATEK Food",
-    "description": "Order from restaurants and eateries near you. Pay by MoMo, we place your order and a rider brings it to you.",
+    "description": "Order from restaurants and eateries near you. Pay by MoMo and a rider brings it to your door.",
     "id": "./", "start_url": "./", "scope": "./", "display": "standalone", "orientation": "any",
     "background_color": "#d4570e", "theme_color": "#d4570e", "categories": ["food"],
     "icons": [

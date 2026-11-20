@@ -1,7 +1,7 @@
 {
   "name": "nyansatek.food",
   "short_name": "NYANSATEK Food",
-  "description": "Order from restaurants and eateries near you. Pay by MoMo, we place your order and a rider brings it to you.",
+  "description": "Order from restaurants and eateries near you. Pay by MoMo and a rider brings it to your door.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
